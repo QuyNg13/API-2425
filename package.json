@@ -6,9 +6,9 @@
   "scripts": {
     "clean": "rimraf dist && mkdir dist",
     "start": "node server/server.js",
-    "predev": "npm run clean",
+    "predev": "npm run clean && npm run build",
     "dev": "npm-run-all --parallel dev:*",
-    "dev:client": "vite --config vite.config.js",
+    "dev:client": "chokidar 'client/**/*' -c 'npm run build:client'",
     "dev:server": "nodemon server/server.js --ext js,liquid",
     "prebuild": "npm run clean",
     "build": "npm-run-all build:*",
@@ -18,6 +18,7 @@
   "dependencies": {
     "@tinyhttp/app": "^2.5.2",
     "@tinyhttp/logger": "^2.1.0",
+    "chokidar-cli": "^3.0.0",
     "dotenv": "^16.4.7",
     "liquidjs": "^10.21.0",
     "nodemon": "^3.1.9",
