@@ -2,16 +2,17 @@
 
 {% block content %}
 
-<h1 class="h1">{{ title }}</h1>
-
-<ul class="grid">
-  {% for item in items %}
-    <li>
-      <a href="/plant/{{ item.id }}">
-        {% render 'server/components/card/card.liquid', item: item %}
-      </a>
-    </li>
-  {% endfor %}
+<button id="getLocation">Vind dichtstbijzijnde station</button>
+<p id="stationResult"></p>
+<ul id="departuresList">
+  {% if departures %}
+    {% for dep in departures %}
+      <li>{{ dep.direction }} - {{ dep.time }} - Spoor {{ dep.track }}</li>
+    {% endfor %}
+  {% else %}
+    <li>Nog geen vertrektijden beschikbaar.</li>
+  {% endif %}
 </ul>
+
 
 {% endblock %}
