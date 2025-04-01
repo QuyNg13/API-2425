@@ -3,7 +3,11 @@
 {% block content %}
 
 <button id="getLocation">Vind dichtstbijzijnde station</button>
-<p id="stationResult"></p>
+{% if station %}
+  <p id="stationResult">Dichtstbijzijnde station: {{ station }}</p>
+{% else %}
+  <p id="stationResult">Geen station gevonden.</p>
+{% endif %}
 <ul id="departuresList">
   {% if departures %}
     {% for dep in departures %}
