@@ -2,6 +2,16 @@
 
 {% block content %}
 
+<form action="/departures" method="GET">
+  <label for="lat">Latitude:</label>
+  <input type="text" id="lat" name="lat">
+  
+  <label for="lng">Longitude:</label>
+  <input type="text" id="lng" name="lng">
+  
+  <button type="submit">Zoek station</button>
+</form>
+
 <button id="getLocation">Vind dichtstbijzijnde station</button>
 {% if station %}
   <p id="stationResult">Dichtstbijzijnde station: {{ station }}</p>
@@ -11,7 +21,7 @@
 <ul id="departuresList">
   {% if departures %}
     {% for dep in departures %}
-      <li>{{ dep.direction }} - {{ dep.time }} - Spoor {{ dep.track }}</li>
+      <li>{{ dep.direction }} - {{ dep.time }} - Spoor {{ dep.track }} - {{ dep.product }}</li>
     {% endfor %}
   {% else %}
     <li>Nog geen vertrektijden beschikbaar.</li>
