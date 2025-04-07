@@ -47,7 +47,8 @@ app.get('/departures', async (req, res) => {
       direction: dep.direction,
       time: dep.plannedDateTime,
       track: dep.plannedTrack,
-      product: dep.product.categoryCode
+      product: dep.product.categoryCode,
+      number: dep.product.number
     }));
 
     //Stationsnaam inladen
@@ -59,6 +60,47 @@ app.get('/departures', async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/departure/:productNumber', async (req, res) => {
+  const productNumber = req.params.productNumber;
+  
+  try {
+    // Haal gedetailleerde informatie op voor dit vertreknummer
+    const departureDetailResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/journey?train=${productNumber}&omitCrowdForecast=false`, {
+      headers: { 
+        "Ocp-Apim-Subscription-Key": NS_API_KEY, 
+        "Accept": "application/json" 
+      }
+    });
+
+    const journeyData = await departureDetailResponse.json();
+
+    const stops = journeyData.payload.stops.map(stop => ({
+      id: stop.id,
+      stopName: stop.stop.name,
+      status: stop.status,
+      plannedArrival: (stop.arrivals && stop.arrivals.length > 0) ? stop.arrivals[0].plannedTime : null,
+      actualArrival: (stop.arrivals && stop.arrivals.length > 0) ? stop.arrivals[0].actualTime : null,
+      plannedDeparture: (stop.departures && stop.departures.length > 0) ? stop.departures[0].plannedTime : null,
+      actualDeparture: (stop.departures && stop.departures.length > 0) ? stop.departures[0].actualTime : null,
+      platform: (stop.departures && stop.departures.length > 0) ? stop.departures[0].plannedTrack : null,
+      crowdForecast: (stop.departures && stop.departures.length > 0) ? stop.departures[0].crowdForecast : "UNKNOWN",
+      trainType: stop.actualStock ? stop.actualStock.trainType : null,
+      facilities: stop.actualStock ? stop.actualStock.trainParts.map(part => part.facilities).flat() : [],
+      trainImage: (stop.actualStock && stop.actualStock.trainParts && stop.actualStock.trainParts.length > 0)
+                    ? stop.actualStock.trainParts[0].image.uri
+                    : null
+    }));
+
+    return res.send(renderTemplate('server/views/detail.liquid', {
+      title: `Details voor vertrek ${productNumber}`,
+      stops
+    }));
+
+  } catch (error) {
+    res.status(500).send(`Fout: ${error.message}`);
   }
 });
 

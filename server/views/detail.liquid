@@ -1,6 +1,46 @@
 {% layout "server/layouts/base.liquid" %}
 
 {% block content %}
-<h1 class="h1">{{ item.name }}</h1>
-<img src="{{ item.image.src }}" alt="{{ item.image.alt }}" width="{{ item.image.width }}" height="{{ item.image.height }}" />
+<h1>{{ title }}</h1>
+  {% if stops and stops.size > 0 %}
+    {% for stop in stops %}
+      <div class="stop">
+        <summary>
+        <h2>{{ stop.stopName }}</h2>
+        <p>Status: {{ stop.status }}</p>
+        </summary>
+        <details>
+        {% if stop.trainImage %}
+            <img src="{{ stop.trainImage }}" alt="{{ stop.trainType }}">
+          {% endif %}
+        {% if stop.plannedArrival %}
+          <p>Geplande aankomst: {{ stop.plannedArrival }}</p>
+        {% endif %}
+        {% if stop.actualArrival %}
+          <p>Werkelijke aankomst: {{ stop.actualArrival }}</p>
+        {% endif %}
+        {% if stop.plannedDeparture %}
+          <p>Geplande vertrektijd: {{ stop.plannedDeparture }}</p>
+        {% endif %}
+        {% if stop.actualDeparture %}
+          <p>Werkelijke vertrektijd: {{ stop.actualDeparture }}</p>
+        {% endif %}
+        {% if stop.platform %}
+          <p>Platform: {{ stop.platform }}</p>
+        {% endif %}
+        <p>Crowd Forecast: {{ stop.crowdForecast }}</p>
+        {% if stop.trainType %}
+          <p>Trein type: {{ stop.trainType }}</p>
+        {% endif %}
+        {% if stop.facilities and stop.facilities.size > 0 %}
+          <p>Faciliteiten: {{ stop.facilities | join: ", " }}</p>
+        {% endif %}
+        </details>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>Geen stops gevonden.</p>
+  {% endif %}
+
+<p><a href="/">← Terug naar Home</a></p>
 {% endblock %}

@@ -1,0 +1,8 @@
+.stop{
+  margin-top: 1rem;
+  border: solid 2px black;
+}
+
+.stop img{
+  max-width: 80%;
+}

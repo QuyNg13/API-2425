@@ -7,7 +7,7 @@
 @import '../server/views/index.css';
 
 /* component styling */
-@import '../server/components/card/card.css';
+@import '../server/components/journey/card.css';
 
 body {
   color: black;
