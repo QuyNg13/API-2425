@@ -93,21 +93,19 @@ app.get('/departure/:productNumber', async (req, res) => {
 
     const journeyData = await departureDetailResponse.json();
 
-    const stops = journeyData.payload.stops.map(stop => ({
-      id: stop.id,
-      stopName: stop.stop.name,
-      status: stop.status,
-      plannedArrival: (stop.arrivals && stop.arrivals.length > 0) ? stop.arrivals[0].plannedTime : null,
-      actualArrival: (stop.arrivals && stop.arrivals.length > 0) ? stop.arrivals[0].actualTime : null,
-      plannedDeparture: (stop.departures && stop.departures.length > 0) ? stop.departures[0].plannedTime : null,
-      actualDeparture: (stop.departures && stop.departures.length > 0) ? stop.departures[0].actualTime : null,
-      platform: (stop.departures && stop.departures.length > 0) ? stop.departures[0].plannedTrack : null,
-      crowdForecast: (stop.departures && stop.departures.length > 0) ? stop.departures[0].crowdForecast : "UNKNOWN",
-      trainType: stop.actualStock ? stop.actualStock.trainType : null,
-      facilities: stop.actualStock ? stop.actualStock.trainParts.map(part => part.facilities).flat() : [],
-      trainImage: (stop.actualStock && stop.actualStock.trainParts && stop.actualStock.trainParts.length > 0)
-                    ? stop.actualStock.trainParts[0].image.uri
-                    : null
+    const stops = journeyData.payload.stops.map(({ id, stop, status, arrivals = [], departures = [], actualStock }) => ({
+      id,
+      stopName: stop.name,
+      status,
+      plannedArrival: arrivals[0]?.plannedTime || null,
+      actualArrival: arrivals[0]?.actualTime || null,
+      plannedDeparture: departures[0]?.plannedTime || null,
+      actualDeparture: departures[0]?.actualTime || null,
+      platform: departures[0]?.plannedTrack || null,
+      crowdForecast: departures[0]?.crowdForecast || "UNKNOWN",
+      trainType: actualStock?.trainType || null,
+      facilities: actualStock?.trainParts?.flatMap(part => part.facilities) || [],
+      trainImage: actualStock?.trainParts?.[0]?.image?.uri || null
     }));
 
     return res.send(renderTemplate('server/views/detail.liquid', {
