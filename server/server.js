@@ -3,6 +3,7 @@ import { App } from '@tinyhttp/app';
 import { logger } from '@tinyhttp/logger';
 import { Liquid } from 'liquidjs';
 import sirv from 'sirv';
+import cookie from 'cookie';
 
 const NS_API_KEY = process.env.NS_API_KEY;
 const API_BASE = "https://gateway.apiportal.ns.nl";
@@ -20,9 +21,9 @@ app.get('/', async (req, res) => {
   return res.send(renderTemplate('server/views/index.liquid', { title: 'Home' }));
 });
 
+// Route voor gevonden station
 app.get('/departures', async (req, res) => {
   const { lat, lng } = req.query;
-  // if (!lat || !lng) return res.status(400).send({ error: "Geef lat en lng op" });
 
   try {
     // Station ophalen
@@ -33,6 +34,12 @@ app.get('/departures', async (req, res) => {
     if (!stationResponse.ok) throw new Error(`API error: ${stationResponse.status}`);
     const stationData = await stationResponse.json();
     const station = stationData.payload[0];
+
+    // Sla de UICCode op in een cookie
+    res.cookie('departureUicCode', station.id.uicCode, {
+      httpOnly: true,  // voorkomt toegang via JS aan de clientzijde
+      secure: false,   // stel dit in op 'true' als je HTTPS gebruikt
+    });
 
     // Vertrektijden ophalen
     const departuresResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/departures?uicCode=${station.id.uicCode}`, {
@@ -65,10 +72,20 @@ app.get('/departures', async (req, res) => {
 
 app.get('/departure/:productNumber', async (req, res) => {
   const productNumber = req.params.productNumber;
+
+  // Haal UICCode op uit cookies
+  const cookies = cookie.parse(req.headers.cookie || '');
+  console.log('Cookies:', cookies);  // Debug
+
+  const departureUicCode = cookies.departureUicCode;
+
+  if (!departureUicCode) {
+    return res.status(400).json({ error: "Geen vertrekstation gevonden in cookies." });
+  }
   
   try {
     // Haal gedetailleerde informatie op voor dit vertreknummer
-    const departureDetailResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/journey?train=${productNumber}&omitCrowdForecast=false`, {
+    const departureDetailResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/journey?train=${productNumber}&departureUicCode=${departureUicCode}&omitCrowdForecast=false`, {
       headers: { 
         "Ocp-Apim-Subscription-Key": NS_API_KEY, 
         "Accept": "application/json" 

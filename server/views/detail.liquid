@@ -7,23 +7,23 @@
       <div class="stop">
         <summary>
         <h2>{{ stop.stopName }}</h2>
-        <p>Status: {{ stop.status }}</p>
-        </summary>
-        <details>
-        {% if stop.trainImage %}
-            <img src="{{ stop.trainImage }}" alt="{{ stop.trainType }}">
-          {% endif %}
-        {% if stop.plannedArrival %}
-          <p>Geplande aankomst: {{ stop.plannedArrival | date: "%H:%M" }}</p>
-        {% endif %}
-        {% if stop.actualArrival %}
-          <p>Werkelijke aankomst: {{ stop.actualArrival | date: "%H:%M" }}</p>
-        {% endif %}
         {% if stop.plannedDeparture %}
           <p>Geplande vertrektijd: {{ stop.plannedDeparture | date: "%H:%M" }}</p>
         {% endif %}
         {% if stop.actualDeparture %}
           <p>Werkelijke vertrektijd: {{ stop.actualDeparture | date: "%H:%M" }}</p>
+        {% endif %}
+        </summary>
+        <details>
+        {% if stop.trainImage %}
+            <img src="{{ stop.trainImage }}" alt="{{ stop.trainType }}">
+          {% endif %}
+          <p>Status: {{ stop.status }}</p>
+        {% if stop.plannedArrival %}
+          <p>Geplande aankomst: {{ stop.plannedArrival | date: "%H:%M" }}</p>
+        {% endif %}
+        {% if stop.actualArrival %}
+          <p>Werkelijke aankomst: {{ stop.actualArrival | date: "%H:%M" }}</p>
         {% endif %}
         {% if stop.platform %}
           <p>Spoor: {{ stop.platform }}</p>
