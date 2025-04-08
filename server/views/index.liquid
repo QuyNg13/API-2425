@@ -23,7 +23,7 @@
   {% for dep in departures %}
   <li>
     <a href="/departure/{{ dep.number }}">
-      {{ dep.direction }} - {{ dep.time }} - Spoor {{ dep.track }} - {{ dep.product }}
+      {{ dep.direction }} - {{ dep.time | date: "%H:%M"}} - Spoor {{ dep.track }} - {{ dep.product }}
     </a>
   </li>
   {% endfor %}
