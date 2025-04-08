@@ -1,0 +1,26 @@
+  .departure-item {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    padding: 12px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+  }
+  
+  .departure-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .departure-link {
+    text-decoration: none;
+    color: var(--NS-blauw);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .departure-info {
+    display: contents;
+  }
+

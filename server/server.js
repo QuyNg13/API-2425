@@ -74,8 +74,7 @@ app.get('/departure/:productNumber', async (req, res) => {
   const productNumber = req.params.productNumber;
 
   // Haal UICCode op uit cookies
-  const cookies = cookie.parse(req.headers.cookie || '');
-  console.log('Cookies:', cookies);  // Debug
+  const cookies = cookie.parse(req.headers.cookie || ''); 
 
   const departureUicCode = cookies.departureUicCode;
 
@@ -84,7 +83,7 @@ app.get('/departure/:productNumber', async (req, res) => {
   }
   
   try {
-    // Haal gedetailleerde informatie op voor dit vertreknummer
+    // Haal informatie op voor dit vertreknummer vanaf het station dat gevonden is
     const departureDetailResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/journey?train=${productNumber}&departureUicCode=${departureUicCode}&omitCrowdForecast=false`, {
       headers: { 
         "Ocp-Apim-Subscription-Key": NS_API_KEY, 
@@ -112,7 +111,7 @@ app.get('/departure/:productNumber', async (req, res) => {
     }));
 
     return res.send(renderTemplate('server/views/detail.liquid', {
-      title: `Details voor vertrek ${productNumber}`,
+      title: `Details voor vertrek ${productNumber} vanaf ${stops[0]?.stopName}`,
       stops
     }));
 

@@ -1,31 +1,39 @@
 {% layout "server/layouts/base.liquid" %}
 
 {% block content %}
+<div class="stationSearch">
+  <form action="/departures" method="GET">
+    <label for="lat">Latitude:</label>
+    <input type="text" id="lat" name="lat">
 
-<form action="/departures" method="GET">
-  <label for="lat">Latitude:</label>
-  <input type="text" id="lat" name="lat">
+    <label for="lng">Longitude:</label>
+    <input type="text" id="lng" name="lng">
 
-  <label for="lng">Longitude:</label>
-  <input type="text" id="lng" name="lng">
+    <button type="submit">Zoek station</button>
+  </form>
+  <button id="getLocation">Vind dichtstbijzijnde station</button>
+  {% if station %}
+</div>
 
-  <button type="submit">Zoek station</button>
-</form>
-
-<button id="getLocation">Vind dichtstbijzijnde station</button>
-{% if station %}
-<p id="stationResult">Dichtstbijzijnde station: {{ station }}</p>
+<div class="station">
+  <h2 class="station-content" id="stationResult">{{ station }}</h2>
+</div>
 {% else %}
-<p id="stationResult">Geen station gevonden.</p>
+<h2 id="stationResult">Geen station gevonden.</h2>
 {% endif %}
-<ul id="departuresList">
+<ul>
   {% if departures %}
   {% for dep in departures %}
-  <li>
-    <a href="/departure/{{ dep.number }}">
-      {{ dep.direction }} - {{ dep.time | date: "%H:%M"}} - Spoor {{ dep.track }} - {{ dep.product }}
-    </a>
-  </li>
+    <li class="departure-item">
+      <a href="/departure/{{ dep.number }}" class="departure-link">
+        <div class="departure-info">
+          <span>{{ dep.direction }}</span>
+          <span>{{ dep.time | date: "%H:%M" }}</span>
+          <div><span class="spoor">spoor {{ dep.track }}</span></div>
+          <span>{{ dep.product }}</span>
+        </div>
+      </a>
+    </li>
   {% endfor %}
   {% else %}
   <li>Nog geen vertrektijden beschikbaar.</li>

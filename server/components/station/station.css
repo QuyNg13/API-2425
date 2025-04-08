@@ -1,0 +1,10 @@
+.station {
+    margin: 1rem 0 1rem 0;
+}
+
+.station-content {
+    color: #fff;
+    background: var(--NS-blauw);
+    width: fit-content;
+    padding: 5px;
+}

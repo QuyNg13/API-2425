@@ -1,0 +1,10 @@
+.stationSearch {
+    border: solid 2px var(--NS-blauw);
+    margin: 1rem 0 1rem 0;
+    padding: 1rem;
+    border-radius: 10px;
+}   
+
+.stationSearch >*{
+    margin: 5px;
+}
