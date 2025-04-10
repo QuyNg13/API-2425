@@ -50,12 +50,27 @@ app.get('/departures', async (req, res) => {
     const departuresData = await departuresResponse.json();
 
     //Benodigde data van departures
-    const departures = departuresData.payload.departures.map(dep => ({
-      direction: dep.direction,
-      time: dep.plannedDateTime,
-      track: dep.plannedTrack,
-      product: dep.product.categoryCode,
-      number: dep.product.number
+    const departures = await Promise.all(departuresData.payload.departures.map(async dep => {
+
+      // Fetch train image
+      const departureDetailResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/journey?train=${dep.product.number}&departureUicCode=${station.id.uicCode}&omitCrowdForecast=false`, {
+        headers: { 
+          "Ocp-Apim-Subscription-Key": NS_API_KEY, 
+          "Accept": "application/json" 
+        }
+      });
+
+      const journeyData = await departureDetailResponse.json();
+      const trainImage = journeyData.payload.stops[0]?.actualStock?.trainParts?.[0]?.image?.uri || null;
+
+      return {
+        direction: dep.direction,
+        time: dep.plannedDateTime,
+        track: dep.plannedTrack,
+        product: dep.product.categoryCode,
+        number: dep.product.number,
+        trainImage
+      };
     }));
 
     //Stationsnaam inladen

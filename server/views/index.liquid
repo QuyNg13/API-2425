@@ -24,7 +24,7 @@
 <ul>
   {% if departures %}
   {% for dep in departures %}
-    <li class="departure-item">
+    <li class="departure-item">      
       <a href="/departure/{{ dep.number }}" class="departure-link">
         <div class="departure-info">
           <span>{{ dep.direction }}</span>
@@ -32,6 +32,7 @@
           <div><span class="spoor">spoor {{ dep.track }}</span></div>
           <span>{{ dep.product }}</span>
         </div>
+        <img src="{{ dep.trainImage }}" alt="Train Image" class="departure-image"/>
       </a>
     </li>
   {% endfor %}
@@ -39,6 +40,5 @@
   <li>Nog geen vertrektijden beschikbaar.</li>
   {% endif %}
 </ul>
-
 
 {% endblock %}

@@ -13,14 +13,20 @@
   .departure-link {
     text-decoration: none;
     color: var(--NS-blauw);
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 10px;
     padding: 12px;
     align-items: center;
   }
-  
+
   .departure-info {
-    display: contents;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
   }
+
+  .departure-image {
+    height: 3rem;
+}
 
