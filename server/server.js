@@ -23,9 +23,28 @@ app.get('/', async (req, res) => {
 
 // Route voor gevonden station
 app.get('/departures', async (req, res) => {
-  const { lat, lng } = req.query;
+
+  const { adres } = req.query; // Haal 'adres' uit de queryparameters
+
+  if (!adres) {
+    return res.status(400).json({ error: "Het adres is verplicht." });
+  }
 
   try {
+    const placesResponse = await fetch(`${API_BASE}/places-api/v2/autosuggest?q=${adres}&type=address`, {
+      headers: {
+        "Ocp-Apim-Subscription-Key": NS_API_KEY,
+        "Accept": "application/json"
+      }
+    });
+
+    const placesData = await placesResponse.json();
+    const location = placesData.payload[0]?.locations[0];
+    if (!location) throw new Error('Geen locatie gevonden voor het opgegeven adres.');
+
+    const lat = location.lat;
+    const lng = location.lng;
+
     // Station ophalen
     const stationResponse = await fetch(`${API_BASE}/nsapp-stations/v3/nearest?lat=${lat}&lng=${lng}`, {
       headers: { "Ocp-Apim-Subscription-Key": NS_API_KEY, "Accept": "application/json" }
