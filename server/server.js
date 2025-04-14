@@ -21,6 +21,38 @@ app.get('/', async (req, res) => {
   return res.send(renderTemplate('server/views/index.liquid', { title: 'Home' }));
 });
 
+// Adres suggesties
+app.get('/autosuggest', async (req, res) => {
+  const query = req.query.query;
+
+  if (!query) {
+      return res.status(400).json({ error: "Query is verplicht." });
+  }
+
+  try {
+      const response = await fetch(`${API_BASE}/places-api/v2/autosuggest?q=${query}&type=address`, {
+          headers: {
+              "Ocp-Apim-Subscription-Key": NS_API_KEY,
+              "Accept": "application/json"
+          }
+      });
+
+      if (!response.ok) throw new Error(`API error: ${response.status}`);
+      const data = await response.json();
+
+      const suggestions = data.payload.map((item) => {
+          const location = item.locations[0];
+          return {
+              label: `${location.street}, ${location.city}`
+          };
+      });
+
+      res.json({ suggestions });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
 // Route voor gevonden station
 app.get('/departures', async (req, res) => {
 
@@ -56,8 +88,7 @@ app.get('/departures', async (req, res) => {
 
     // Sla de UICCode op in een cookie
     res.cookie('departureUicCode', station.id.uicCode, {
-      httpOnly: true,  // voorkomt toegang via JS aan de clientzijde
-      secure: false,   // stel dit in op 'true' als je HTTPS gebruikt
+      httpOnly: true  // voorkomt toegang via JS aan de clientzijde
     });
 
     // Vertrektijden ophalen

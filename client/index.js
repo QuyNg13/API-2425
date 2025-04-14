@@ -100,3 +100,32 @@ document.getElementById("getLocation").addEventListener("click", async function(
         alert("Kon locatie niet ophalen: " + error.message);
     });
 });
+
+document.getElementById("adres").addEventListener("input", async function (event) {
+    const query = event.target.value;
+
+    if (query.length < 3) {
+        document.getElementById("suggestions").innerHTML = ""; // Wis suggesties als de invoer te kort is
+        return;
+    }
+
+    try {
+        const response = await fetch(`/autosuggest?query=${query}`);
+        const data = await response.json();
+
+        const suggestionsList = document.getElementById("suggestions");
+        suggestionsList.innerHTML = ""; // Wis bestaande suggesties
+
+        data.suggestions.forEach((suggestion) => {
+            const listItem = document.createElement("li");
+            listItem.innerText = suggestion.label;
+            listItem.addEventListener("click", () => {
+                document.getElementById("adres").value = suggestion.label;
+                suggestionsList.innerHTML = ""; // Wis suggesties na selectie
+            });
+            suggestionsList.appendChild(listItem);
+        });
+    } catch (error) {
+        console.error("Fout bij ophalen suggesties:", error);
+    }
+});

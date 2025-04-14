@@ -4,8 +4,9 @@
 <div class="stationSearch">
   <form action="/departures" method="GET">
 
-    <label for="adres">Locatie (adres of plaats):</label>
+    <label for="adres">Adres:</label>
     <input type="text" id="adres" name="adres">
+    <ul id="suggestions" class="suggestions-list"></ul>
 
     <button type="submit">Zoek station</button>
   </form>
