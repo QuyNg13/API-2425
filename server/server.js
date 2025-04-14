@@ -21,7 +21,9 @@ app.get('/', async (req, res) => {
   return res.send(renderTemplate('server/views/index.liquid', { title: 'Home' }));
 });
 
+//==========================
 // Adres suggesties
+//==========================
 app.get('/autosuggest', async (req, res) => {
   const query = req.query.query;
 
@@ -52,7 +54,9 @@ app.get('/autosuggest', async (req, res) => {
   }
 });
 
+// ========================================
 // Route voor gevonden station op basis van adres
+// ========================================
 app.get('/departures', async (req, res) => {
 
   const { adres } = req.query; // Haal 'adres' uit de queryparameters
@@ -134,7 +138,9 @@ app.get('/departures', async (req, res) => {
   }
 });
 
+// ========================================
 // Route voor gevonden station op basis van adres
+// ========================================
 app.get('/nearest-station', async (req, res) => {
   const { lat, lng } = req.query;
 
@@ -193,6 +199,10 @@ app.get('/nearest-station', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// ========================================
+// Route voor details op basis van vertreknummer
+// ========================================
 
 app.get('/departure/:productNumber', async (req, res) => {
   const productNumber = req.params.productNumber;
