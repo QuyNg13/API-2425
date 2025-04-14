@@ -52,7 +52,7 @@ app.get('/autosuggest', async (req, res) => {
   }
 });
 
-// Route voor gevonden station
+// Route voor gevonden station op basis van adres
 app.get('/departures', async (req, res) => {
 
   const { adres } = req.query; // Haal 'adres' uit de queryparameters
@@ -123,6 +123,66 @@ app.get('/departures', async (req, res) => {
     }));
 
     //Stationsnaam inladen
+    return res.send(renderTemplate('server/views/index.liquid', {
+      title: `Vertrektijden van ${station.names.long}`,
+      station: station.names.long,
+      departures
+    }));
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route voor gevonden station op basis van adres
+app.get('/nearest-station', async (req, res) => {
+  const { lat, lng } = req.query;
+
+  if (!lat || !lng) {
+    return res.status(400).json({ error: "Latitude en longitude zijn verplicht." });
+  }
+
+  try {
+    // Haal het dichtstbijzijnde station op
+    const stationResponse = await fetch(`${API_BASE}/nsapp-stations/v3/nearest?lat=${lat}&lng=${lng}`, {
+      headers: { "Ocp-Apim-Subscription-Key": NS_API_KEY, "Accept": "application/json" }
+    });
+
+    if (!stationResponse.ok) throw new Error(`API error: ${stationResponse.status}`);
+    const stationData = await stationResponse.json();
+    const station = stationData.payload[0];
+
+    // Haal vertrektijden op
+    const departuresResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/departures?uicCode=${station.id.uicCode}`, {
+      headers: { "Ocp-Apim-Subscription-Key": NS_API_KEY, "Accept": "application/json" }
+    });
+
+    if (!departuresResponse.ok) throw new Error(`API error: ${departuresResponse.status}`);
+    const departuresData = await departuresResponse.json();
+
+    // Verwerk de vertrektijden
+    const departures = await Promise.all(departuresData.payload.departures.map(async dep => {
+      const departureDetailResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/journey?train=${dep.product.number}&departureUicCode=${station.id.uicCode}&omitCrowdForecast=false`, {
+        headers: { 
+          "Ocp-Apim-Subscription-Key": NS_API_KEY, 
+          "Accept": "application/json" 
+        }
+      });
+
+      const journeyData = await departureDetailResponse.json();
+      const trainImage = journeyData.payload.stops[0]?.actualStock?.trainParts?.[0]?.image?.uri || null;
+
+      return {
+        direction: dep.direction,
+        time: dep.plannedDateTime,
+        track: dep.plannedTrack,
+        product: dep.product.categoryCode,
+        number: dep.product.number,
+        trainImage
+      };
+    }));
+
+    // Render de template met station- en vertrekgegevens
     return res.send(renderTemplate('server/views/index.liquid', {
       title: `Vertrektijden van ${station.names.long}`,
       station: station.names.long,

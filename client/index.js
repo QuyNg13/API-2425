@@ -1,7 +1,5 @@
 import './index.css';
 
-console.log('Hello, world!');
-
 // document.getElementById("getLocation").addEventListener("click", async function() {
 //     if (!navigator.geolocation) {
 //         alert("Geolocatie wordt niet ondersteund door jouw browser.");
@@ -92,7 +90,7 @@ document.getElementById("getLocation").addEventListener("click", async function(
         const lng = position.coords.longitude;
 
         try {
-            window.location.href = `/departures?lat=${lat}&lng=${lng}`;
+            window.location.href = `/nearest-station?lat=${lat}&lng=${lng}`;
         } catch (error) {
             console.error("Fout bij ophalen station of vertrektijden:", error);
         }

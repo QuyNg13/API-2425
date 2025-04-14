@@ -3,17 +3,15 @@
 {% block content %}
 <div class="stationSearch">
   <form action="/departures" method="GET">
-
     <label for="adres">Adres:</label>
     <input type="text" id="adres" name="adres">
     <ul id="suggestions" class="suggestions-list"></ul>
-
     <button type="submit">Zoek station</button>
   </form>
   <button id="getLocation">Vind dichtstbijzijnde station</button>
-  {% if station %}
 </div>
 
+{% if station %}
 <div class="station">
   <h2 class="station-content" id="stationResult">{{ station }}</h2>
 </div>
