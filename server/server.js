@@ -40,11 +40,10 @@ app.get('/autosuggest', async (req, res) => {
       if (!response.ok) throw new Error(`API error: ${response.status}`);
       const data = await response.json();
 
-      const suggestions = data.payload.map((item) => {
-          const location = item.locations[0];
-          return {
+      const suggestions = data.payload.flatMap((item) => {
+          return item.locations.map((location) => ({
               label: `${location.street}, ${location.city}`
-          };
+          }));
       });
 
       res.json({ suggestions });
