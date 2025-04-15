@@ -77,7 +77,9 @@ import './index.css';
 //         alert("Kon locatie niet ophalen: " + error.message);
 //     });
 // });
-
+document.getElementById('back').addEventListener('click', function() {
+    window.history.back();
+  });
 
 document.getElementById("getLocation").addEventListener("click", async function() {
     if (!navigator.geolocation) {
