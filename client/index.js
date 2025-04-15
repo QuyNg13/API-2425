@@ -77,28 +77,47 @@ import './index.css';
 //         alert("Kon locatie niet ophalen: " + error.message);
 //     });
 // });
-document.getElementById('back').addEventListener('click', function() {
-    window.history.back();
-  });
+const backButton = document.getElementById('back');
+if (backButton) {
+    backButton.addEventListener('click', function () {
+        window.history.back();
+    });
+}
 
-document.getElementById("getLocation").addEventListener("click", async function() {
+document.getElementById("getLocation").addEventListener("click", async function () {
     if (!navigator.geolocation) {
         alert("Geolocatie wordt niet ondersteund door jouw browser.");
         return;
     }
 
-    navigator.geolocation.getCurrentPosition(async (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+    // Controle geolocatie permissie met permission-API
+    try {
+        const permissionStatus = await navigator.permissions.query({ name: "geolocation" });
 
-        try {
-            window.location.href = `/nearest-station?lat=${lat}&lng=${lng}`;
-        } catch (error) {
-            console.error("Fout bij ophalen station of vertrektijden:", error);
+        if (permissionStatus.state === "denied") {
+            const messageElement = document.getElementById("permissionMessage");
+            messageElement.innerText = "locatie is geblokkeerd. Schakel locatie in via de browserinstellingen.";
+            return;
         }
-    }, (error) => {
-        alert("Kon locatie niet ophalen: " + error.message);
-    });
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                try {
+                    window.location.href = `/nearest-station?lat=${lat}&lng=${lng}`;
+                } catch (error) {
+                    console.error("Fout bij ophalen station of vertrektijden:", error);
+                }
+            },
+            (error) => {
+                alert("Kon locatie niet ophalen: " + error.message);
+            }
+        );
+    } catch (error) {
+        console.error("Fout bij controleren van geolocatie-permissie:", error);
+    }
 });
 
 document.getElementById("adres").addEventListener("input", async function (event) {

@@ -12,7 +12,7 @@
       width: max-content;
 
       p{
-        width: max-content;
+        max-width: 20rem;
       }
     }
 

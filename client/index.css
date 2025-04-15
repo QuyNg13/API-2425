@@ -13,6 +13,7 @@
 @import '../server/components/departure/departure.css';
 @import '../server/components/station/station.css';
 @import '../server/components/search/stationsearch.css';
+@import '../server/components/search/permissionMessage.css';
 
 body {
   color: black;
