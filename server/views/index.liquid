@@ -17,24 +17,27 @@
 </div>
 {% else %}
 <h2 id="stationResult">Geen station gevonden.</h2>
+<p>Vul een adres in of zoek jouw dichtstbijzijnde station.</p>
 {% endif %}
-<ul>
+<ul class="departures">
   {% if departures %}
   {% for dep in departures %}
-    <li class="departure-item">      
-      <a href="/departure/{{ dep.number }}" class="departure-link">
-        <div class="departure-info">
-          <span>{{ dep.direction }}</span>
-          <div><span class="spoor">spoor {{ dep.track }}</span></div>
-          <span>{{ dep.product }}</span>
-          <span>{{ dep.time | date: "%H:%M" }}</span>
-        </div>
-        <img src="{{ dep.trainImage }}" alt="Train Image" class="departure-image"/>
-      </a>
-    </li>
+    <div>
+      <li>      
+        <a href="/departure/{{ dep.number }}">
+          <div class="departure-info">
+            <div>
+              <span>{{ dep.direction }}</span>
+              <span>{{ dep.time | date: "%H:%M" }}</span>
+            </div>
+            <span class="spoor">spoor {{ dep.track }}</span>
+            <span class="product">{{ dep.product }}</span>
+          </div>
+          <img src="{{ dep.trainImage }}" alt="Train Image"/>
+        </a>
+      </li>
+    </div>
   {% endfor %}
-  {% else %}
-  <li>Nog geen vertrektijden beschikbaar.</li>
   {% endif %}
 </ul>
 

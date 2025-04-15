@@ -1,31 +1,52 @@
-  .departure-item {
+.departures {
+  li {
     background-color: #fff;
     border-top: 2px solid #ddd;
     font-weight: bold;
     font-family: Arial, sans-serif;
     transition: background-color 0.3s ease-out;
+
+    a {
+      text-decoration: none;
+      color: var(--NS-blauw);
+      gap: 10px;
+      padding: 12px;
+      align-items: center;
+    }
+
+    img {
+      height: 3rem;
+      max-width: 100%;
+      transition: margin 0.4s ease-in;
+    }
   }
-  
-  .departure-item:hover {
+
+  li:hover {
     background-color: var(--hover-color);
-  }
-  
-  .departure-link {
-    text-decoration: none;
-    color: var(--NS-blauw);
-    gap: 10px;
-    padding: 12px;
-    align-items: center;
-  }
 
-  .departure-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    justify-content: space-between;
-    align-items: center;
+    img {
+      margin: 0 0 0 15rem;
+    }
   }
-
-  .departure-image {
-    height: 3rem;
 }
+
+.departure-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  .spoor {
+    justify-self: flex-end;
+  }
+
+  .product {
+    justify-self: center;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+
 
