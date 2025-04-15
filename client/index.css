@@ -13,7 +13,6 @@
 @import '../server/components/search/stationsearch.css';
 
 body {
-  --NS-blauw: #003082;
   color: black;
   max-width: 1440px;
   margin: 0 auto;

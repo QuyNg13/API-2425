@@ -5,10 +5,10 @@
   <form action="/departures" method="GET">
     <label for="adres">Adres:</label>
     <input type="text" id="adres" name="adres">
-    <ul id="suggestions" class="suggestions-list"></ul>
     <button type="submit">Zoek station</button>
+    <button id="getLocation">Vind dichtstbijzijnde station</button>
   </form>
-  <button id="getLocation">Vind dichtstbijzijnde station</button>
+  <ul id="suggestions" class="suggestions-list"></ul>
 </div>
 
 {% if station %}
