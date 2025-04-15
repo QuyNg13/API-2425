@@ -243,7 +243,6 @@ app.get('/departure/:productNumber', async (req, res) => {
     }));
 
     return res.send(renderTemplate('server/views/detail.liquid', {
-      title: `Details voor vertrek ${productNumber} vanaf ${stops[0]?.stopName}`,
       stops
     }));
 

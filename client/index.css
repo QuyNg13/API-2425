@@ -7,7 +7,9 @@
 @import '../server/views/index.css';
 
 /* component styling */
+@import '../server/components/journey/journeytitle.css';
 @import '../server/components/journey/stops.css';
+@import '../server/components/journey/returnBtn.css';
 @import '../server/components/departure/departure.css';
 @import '../server/components/station/station.css';
 @import '../server/components/search/stationsearch.css';

@@ -1,0 +1,18 @@
+.returnBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 1rem;
+  background: var(--NS-lichtblauw);
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 1rem;
+ transition: background 0.1s ease-out;
+}
+
+.returnBtn:hover{
+    background: var(--NS-blauw);
+  }

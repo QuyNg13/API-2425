@@ -48,48 +48,65 @@
 {% layout "server/layouts/base.liquid" %}
 
 {% block content %}
-<h1>{{ title }}</h1>
+<h1 class="journey-title">Details voor vertrek {{ productNumber }} vanaf <span class="station-content">{{stops[0].stopName}}</span></h1>
   {% if stops and stops.size > 0 %}
     {% assign firstStop = stops[0] %} <!-- Krijg het eerste station -->
     {% for stop in stops %}
       <div class="stop">
         {% if stop == firstStop %}
-          <h2 class="station-content">{{ stop.stopName }}</h2>
-          {% if stop.plannedDeparture %}
-            <p>Geplande vertrektijd: {{ stop.plannedDeparture | date: "%H:%M" }}</p>
-          {% endif %}
-          {% if stop.actualDeparture %}
-            <p>Werkelijke vertrektijd: {{ stop.actualDeparture | date: "%H:%M" }}</p>
-          {% endif %}
-          
-          {% if stop.trainImage %}
-            <img src="{{ stop.trainImage }}" alt="{{ stop.trainType }}">
-          {% endif %}
-          <p>Status: {{ stop.status }}</p>
-          {% if stop.plannedArrival %}
-            <p>Geplande aankomst: {{ stop.plannedArrival | date: "%H:%M" }}</p>
-          {% endif %}
-          {% if stop.actualArrival %}
-            <p>Werkelijke aankomst: {{ stop.actualArrival | date: "%H:%M" }}</p>
-          {% endif %}
-          {% if stop.platform %}
-            <p>Spoor: {{ stop.platform }}</p>
-          {% endif %}
-          <p>Drukte: {{ stop.crowdForecast }}</p>
-          {% if stop.trainType %}
-            <p>Trein type: {{ stop.trainType }}</p>
-          {% endif %}
-          {% if stop.facilities and stop.facilities.size > 0 %}
-            <p>Faciliteiten: {{ stop.facilities | join: ", " }}</p>
-          {% endif %}
+          <div class="first-stop">
+            <h2 class="station-content">{{ stop.stopName }}</h2>
+            <div class="stop-info">
+              <div class="text">
+              {% if stop.plannedDeparture %}
+                <p>Geplande vertrektijd: {{ stop.plannedDeparture | date: "%H:%M" }}</p>
+              {% endif %}
+              {% if stop.actualDeparture %}
+                <p>Werkelijke vertrektijd: {{ stop.actualDeparture | date: "%H:%M" }}</p>
+              {% endif %}
+              {% if stop.plannedArrival %}
+                <p>Geplande aankomst: {{ stop.plannedArrival | date: "%H:%M" }}</p>
+              {% endif %}
+              {% if stop.actualArrival %}
+                <p>Werkelijke aankomst: {{ stop.actualArrival | date: "%H:%M" }}</p>
+              {% endif %}
+              {% if stop.platform %}
+                <p>Spoor: {{ stop.platform }}</p>
+              {% endif %}
+              {% if stop.trainType %}
+                <p>Trein type: {{ stop.trainType }}</p>
+              {% endif %}
+              {% if stop.facilities and stop.facilities.size > 0 %}
+                <p>Faciliteiten: {{ stop.facilities | join: ", " }}</p>
+              {% endif %}
+              </div>
+              {% if stop.trainImage %}
+                <img src="{{ stop.trainImage }}" alt="{{ stop.trainType }}">
+              {% endif %}
+            </div>
+          </div>
         {% else %}
           <!-- Alleen aankomst- en vertrektijden voor andere stations -->
-          <h2 class="station-content">{{ stop.stopName }}</h2>
           {% if stop.plannedArrival %}
-            <p>Geplande aankomst: {{ stop.plannedArrival | date: "%H:%M" }}</p>
-          {% endif %}
-          {% if stop.actualArrival %}
-            <p>Werkelijke vertrektijd: {{ stop.actualDeparture | date: "%H:%M" }}</p>
+            <div class="other-stop">
+              <h3 class="station-content">{{ stop.stopName }}</h3>
+              <div class="stop-info">
+                <div>
+                  {% if stop.plannedArrival %}
+                    <p>Geplande aankomst: {{ stop.plannedArrival | date: "%H:%M" }}</p>
+                  {% endif %}
+                  {% if stop.actualArrival %}
+                    <p>Werkelijke vertrektijd: {{ stop.actualDeparture | date: "%H:%M" }}</p>
+                  {% endif %}
+                </div>
+                {% if stop.platform %}
+                  <p>Spoor: {{ stop.platform }}</p>
+                {% endif %}
+                {% if stop.crowdForecast != "UNKNOWN" %}
+                  <p>Drukte: {{ stop.crowdForecast }}</p>
+                {% endif %}
+              </div>
+            </div>
           {% endif %}
         {% endif %}
       </div>
@@ -98,5 +115,5 @@
     <p>Geen stops gevonden.</p>
   {% endif %}
 
-<p><a href="/">← Terug naar Home</a></p>
+<a href="/" class="returnBtn">Terug naar Home</a>
 {% endblock %}

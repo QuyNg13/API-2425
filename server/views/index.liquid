@@ -6,8 +6,8 @@
     <label for="adres">Adres:</label>
     <input type="text" id="adres" name="adres">
     <button type="submit">Zoek station</button>
-    <button id="getLocation">Vind dichtstbijzijnde station</button>
   </form>
+  <button id="getLocation">Vind dichtstbijzijnde station</button>
   <ul id="suggestions" class="suggestions-list"></ul>
 </div>
 
@@ -33,7 +33,9 @@
             <span class="spoor">spoor {{ dep.track }}</span>
             <span class="product">{{ dep.product }}</span>
           </div>
-          <img src="{{ dep.trainImage }}" alt="Train Image"/>
+          {% if dep.trainImage %}
+            <img src="{{ dep.trainImage }}" alt="Train Image"/>
+          {% endif %}
         </a>
       </li>
     </div>
