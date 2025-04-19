@@ -13,6 +13,11 @@
 
       p{
         max-width: 20rem;
+        margin-top: 0.3rem;
+
+        span {
+          font-weight: bold;
+        }
       }
     }
 
@@ -29,11 +34,7 @@
 
   .stop-info {
     background: var(--NS-geel);
-    font-weight: bold;
-    font-family: Arial, sans-serif;
     align-items: center;
-    padding: 0.5rem 0 0.5rem 0;
-    border-radius: 5px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   
@@ -55,7 +56,6 @@
 }
 
 .stop-info {
-  font-weight: bold;
   font-family: Arial, sans-serif;
   align-items: center;
   padding: 0.5rem 0 0.5rem 0;

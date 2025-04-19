@@ -27,10 +27,8 @@
       <li>      
         <a href="/departure/{{ dep.number }}">
           <div class="departure-info">
-            <div>
-              <span>{{ dep.direction }}</span>
-              <span>{{ dep.time | date: "%H:%M" }}</span>
-            </div>
+            <h3>{{ dep.direction }}</h3>
+            <span class="tijd">{{ dep.time | date: "%H:%M" }}</span>
             <span class="spoor">spoor {{ dep.track }}</span>
             <span class="product">{{ dep.product }}</span>
           </div>

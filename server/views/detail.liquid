@@ -59,25 +59,25 @@
             <div class="stop-info">
               <div class="text">
               {% if stop.plannedDeparture %}
-                <p>Geplande vertrektijd: {{ stop.plannedDeparture | date: "%H:%M" }}</p>
+                <p><span> Geplande vertrektijd: </span>{{ stop.plannedDeparture | date: "%H:%M" }}</p>
               {% endif %}
               {% if stop.actualDeparture %}
-                <p>Werkelijke vertrektijd: {{ stop.actualDeparture | date: "%H:%M" }}</p>
+                <p><span> Werkelijke vertrektijd: </span>{{ stop.actualDeparture | date: "%H:%M" }}</p>
               {% endif %}
               {% if stop.plannedArrival %}
-                <p>Geplande aankomst: {{ stop.plannedArrival | date: "%H:%M" }}</p>
+                <p><span> Geplande aankomst: </span>{{ stop.plannedArrival | date: "%H:%M" }}</p>
               {% endif %}
               {% if stop.actualArrival %}
-                <p>Werkelijke aankomst: {{ stop.actualArrival | date: "%H:%M" }}</p>
+                <p><span> Werkelijke aankomst: </span>{{ stop.actualArrival | date: "%H:%M" }}</p>
               {% endif %}
               {% if stop.platform %}
-                <p>Spoor: {{ stop.platform }}</p>
+                <p><span> Spoor: </span>{{ stop.platform }}</p>
               {% endif %}
               {% if stop.trainType %}
-                <p>Trein type: {{ stop.trainType }}</p>
+                <p><span> Trein type: </span>{{ stop.trainType }}</p>
               {% endif %}
               {% if stop.facilities and stop.facilities.size > 0 %}
-                <p>Faciliteiten: {{ stop.facilities | join: ", " }}</p>
+                <p><span> Faciliteiten: </span>{{ stop.facilities | join: ", " }}</p>
               {% endif %}
               </div>
               {% if stop.trainImage %}
