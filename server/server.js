@@ -12,14 +12,12 @@ const API_BASE = "https://gateway.apiportal.ns.nl";
 const engine = new Liquid({ extname: '.liquid' });
 const app = new App();
 
-app.listen(port, () => {
-  console.log(`app listening on port ${port}`)
-})
-
 app
   .use(logger())
   .use('/', sirv('dist'))
-  .listen(3000, () => console.log('Server draait op http://localhost:3000'));
+  .listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
 
 // Route voor de homepage
 app.get('/', async (req, res) => {
