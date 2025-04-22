@@ -14,7 +14,7 @@ const app = new App();
 
 app
   .use(logger())
-  .use('/', sirv('client'))
+  .use('/', sirv('dist'))
   .listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
   });
