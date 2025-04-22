@@ -668,6 +668,44 @@ document.getElementById('back').addEventListener('click', function() {
 ```
 </details>
 
+Omdat ik nog een 2e web API nodig had voor de opdradcht heb ik besloten om een melding te geven als de gebruiker geen toegang heeft gegeven om goelocation op te halen.
+Ik doe dit door middel van de permissions API. Er wordt een melding weergegeven in de form als `navigator.permissions.query` 'denied' is, anders wordt de lat en lng opgehaald zoals gewoonlijk.
+<details>
+<summary> code permissions API melding</summary>
+
+```
+    // Controle geolocatie permissie met permission-API
+    try {
+        const permissionStatus = await navigator.permissions.query({ name: "geolocation" });
+
+        if (permissionStatus.state === "denied") {
+            const messageElement = document.getElementById("permissionMessage");
+            messageElement.innerText = "locatie is geblokkeerd. Schakel locatie in via de browserinstellingen.";
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                try {
+                    window.location.href = `/nearest-station?lat=${lat}&lng=${lng}`;
+                } catch (error) {
+                    console.error("Fout bij ophalen station of vertrektijden:", error);
+                }
+            },
+            (error) => {
+                alert("Kon locatie niet ophalen: " + error.message);
+            }
+        );
+    } catch (error) {
+        console.error("Fout bij controleren van geolocatie-permissie:", error);
+    }
+});
+```
+</details>
+
 deze week heb ik de styling afgemaakt voor alle onderdelen:
 <br>
 **form**
