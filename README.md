@@ -404,9 +404,272 @@ Het plaatje van het treinstel moet ik ophalen uit de journey API. Ik het een ext
 <details>
 <summary><h2>Week 3</h2></summary>
 
-### Doel
+## Doel
+Deze week wil ik me vooral richten op styling zodat het er allemaal goed uit ziet voor de oplevering. 
+Ik wil ook dat je als gebruiker een adres kan invullen in plaats van coördinaten om een station te vinden.
 
-### Voortgang
+## Voortgang
+
+### Idee
+In plaats van een invoerveld voor lat en lng wil ik een invoerveld voor het adres die in de places API van NS de lat en lng op haalt en deze invoert bij de API call voor de departures.
+tijdens het invullen van dit veld moeten er suggesties komen in een lijst onder het invoerveld, deze suggesties komen ook uit de places API.
+
+### Code
+Om een lat en lng uit het adres te krijgen gebruik ik de API om het adres op te zoeken en vervolgens en lat en lng op te halen uit de API.
+<details>
+<summary> code adres omzetten naar lat en lng </summary>
+
+```
+app.get('/departures', async (req, res) => {
+
+  const { adres } = req.query; // Haal 'adres' uit de queryparameters
+
+  if (!adres) {
+    return res.status(400).json({ error: "Het adres is verplicht." });
+  }
+
+  try {
+    const placesResponse = await fetch(`${API_BASE}/places-api/v2/autosuggest?q=${adres}&type=address`, {
+      headers: {
+        "Ocp-Apim-Subscription-Key": NS_API_KEY,
+        "Accept": "application/json"
+      }
+    });
+
+    const placesData = await placesResponse.json();
+    const location = placesData.payload[0]?.locations[0];
+    if (!location) throw new Error('Geen locatie gevonden voor het opgegeven adres.');
+
+    const lat = location.lat;
+    const lng = location.lng;
+```
+</details>
+
+Om suggesties op halen doe ik elke keer dat de gebruiker de input veranderd een API call naar de places API. 
+Ik maakte me hier zorgen om het maximaal aantal call dat ik kan maken naar de API maar ik kon niks vinden over een max aantal calls.
+Ik ben er ook achter gekomen dat NS alleen toegang tot de API blokkeert wanneer ze zien dat je misbruik probeert te maken. Ik heb er dus toch voor gekozen om het op deze manier te doen.
+<br>
+<br>
+Aan de clientzijde kijk ik naar input vanaf drie tekens. Daarna doe ik een oproep naar de server om suggesties op te halen elke keer dat de gebruiker een character typt.
+Op de server vang ik deze query op en gebruik ik deze in de API call. de resultaten worden verander ik naar een lijst met straatnamen en staden waar die straten in zitten.
+Deze stuur ik terug naar de client.
+Ik heb chat GPT gebruik om code te geneneren voor het maken van de lijst van straatnamen in de backend.
+<details>
+<summary> code adres suggesties clientside </summary>
+
+```
+document.getElementById("adres").addEventListener("input", async function (event) {
+    const query = event.target.value;
+
+    if (query.length < 3) {
+        document.getElementById("suggestions").innerHTML = ""; // Wis suggesties als de invoer te kort is
+        return;
+    }
+
+    try {
+        const response = await fetch(`/autosuggest?query=${query}`);
+        const data = await response.json();
+
+        const suggestionsList = document.getElementById("suggestions");
+        suggestionsList.innerHTML = ""; // Wis bestaande suggesties
+
+        data.suggestions.forEach((suggestion) => {
+            const listItem = document.createElement("li");
+            listItem.innerText = suggestion.label;
+            listItem.addEventListener("click", () => {
+                document.getElementById("adres").value = suggestion.label;
+                suggestionsList.innerHTML = ""; // Wis suggesties na selectie
+            });
+            suggestionsList.appendChild(listItem);
+        });
+    } catch (error) {
+        console.error("Fout bij ophalen suggesties:", error);
+    }
+});
+```
+</details>
+<details>
+<summary> code adres suggesties serverside </summary>
+
+```
+app.get('/autosuggest', async (req, res) => {
+  const query = req.query.query;
+
+  if (!query) {
+      return res.status(400).json({ error: "Query is verplicht." });
+  }
+
+  try {
+      const response = await fetch(`${API_BASE}/places-api/v2/autosuggest?q=${query}&type=address`, {
+          headers: {
+              "Ocp-Apim-Subscription-Key": NS_API_KEY,
+              "Accept": "application/json"
+          }
+      });
+
+      if (!response.ok) throw new Error(`API error: ${response.status}`);
+      const data = await response.json();
+
+      const suggestions = data.payload.flatMap((item) => {
+          return item.locations.map((location) => ({
+              label: `${location.street}, ${location.city}`
+          }));
+      });
+
+      res.json({ suggestions });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+```
+</details>
+
+Ik kwam er achter dat het ophalen van het dichtsbijzijnde station nu niet meer werkt omdat ik de code van station ophalen op basis van adres in dezelfde route heb geschreven.
+Om dit op te lossen heb ik een apparte route gemaakt om het dichtsbijzijnde station te vinden.
+<details>
+<summary> code dichtsbijzinde station vinden route</summary>
+
+```
+app.get('/nearest-station', async (req, res) => {
+  const { lat, lng } = req.query;
+
+  if (!lat || !lng) {
+    return res.status(400).json({ error: "Latitude en longitude zijn verplicht." });
+  }
+
+  try {
+    // Haal het dichtstbijzijnde station op
+    const stationResponse = await fetch(`${API_BASE}/nsapp-stations/v3/nearest?lat=${lat}&lng=${lng}`, {
+      headers: { "Ocp-Apim-Subscription-Key": NS_API_KEY, "Accept": "application/json" }
+    });
+
+    if (!stationResponse.ok) throw new Error(`API error: ${stationResponse.status}`);
+    const stationData = await stationResponse.json();
+    const station = stationData.payload[0];
+
+    // Haal vertrektijden op
+    const departuresResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/departures?uicCode=${station.id.uicCode}`, {
+      headers: { "Ocp-Apim-Subscription-Key": NS_API_KEY, "Accept": "application/json" }
+    });
+
+    if (!departuresResponse.ok) throw new Error(`API error: ${departuresResponse.status}`);
+    const departuresData = await departuresResponse.json();
+
+    // Verwerk de vertrektijden
+    const departures = await Promise.all(departuresData.payload.departures.map(async dep => {
+      const departureDetailResponse = await fetch(`${API_BASE}/reisinformatie-api/api/v2/journey?train=${dep.product.number}&departureUicCode=${station.id.uicCode}&omitCrowdForecast=false`, {
+        headers: { 
+          "Ocp-Apim-Subscription-Key": NS_API_KEY, 
+          "Accept": "application/json" 
+        }
+      });
+
+      const journeyData = await departureDetailResponse.json();
+      const trainImage = journeyData.payload.stops[0]?.actualStock?.trainParts?.[0]?.image?.uri || null;
+
+      return {
+        direction: dep.direction,
+        time: dep.plannedDateTime,
+        track: dep.plannedTrack,
+        product: dep.product.categoryCode,
+        number: dep.product.number,
+        trainImage
+      };
+    }));
+
+    // Render de template met station- en vertrekgegevens
+    return res.send(renderTemplate('server/views/index.liquid', {
+      title: `Vertrektijden van ${station.names.long}`,
+      station: station.names.long,
+      departures
+    }));
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+```
+</details>
+
+Om de lijst met suggesties onder de input te krijgen heb ik anchor positioning gebruikt.
+<details>
+<summary> code suggesties anchor positioning</summary>
+
+```
+.stationSearch {
+    display: flex;
+    background: var(--NS-geel);
+    border-radius: 5px;
+    align-items: center;
+    padding: 1rem;
+
+    >form { 
+        display: flex;
+        align-items: center;
+
+        label {
+            margin: 0 0.5rem 0 0;
+        }
+
+        input {
+            anchor-name: --search;
+        }
+    
+        button{
+            background: var(--NS-blauw);
+            color: white;
+            padding: 1rem 0.5rem 1rem 0.5rem;
+            margin: 0 0.5rem 0 0.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    }
+
+    >ul {
+        position: absolute;
+        position-anchor: --search;
+        position-area: bottom span-right;
+        background: white ;
+        box-shadow: #232323 0 2px 5px;
+        max-width: fit-content;
+
+        li{
+            display: flex;
+            padding: 0.2rem 0 0.2rem 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease-out;
+            align-content: center;
+        }
+
+        li:hover {
+            background: var(--hover-color);
+        }
+    }
+}
+```
+</details>
+
+Bij het testen kwam ik er achter dat als je return button gebruikt op de detail pagina om de lege versie van de homepage komt,
+ en niet vanaf de pagina waar je vandaan kwam waar je het station hebt gevonden met de departures.
+<br>
+<br>
+Om dit op te lossen heb ik aan de clientside gezegd dat de button `window.history.back();` uit voert in plaat van `href="/"`
+<details>
+<summary> code return button</summary>
+
+```
+  <button id="back" class="returnBtn">Terug</button>
+
+document.getElementById('back').addEventListener('click', function() {
+    window.history.back();
+  });
+```
+</details>
+
+deze week heb ik de styling afgemaakt voor alle onderdelen:
+
 
 </details>
 <!-- ////////////////// -->
