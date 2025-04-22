@@ -5,7 +5,7 @@ import { Liquid } from 'liquidjs';
 import sirv from 'sirv';
 import cookie from 'cookie';
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const NS_API_KEY = process.env.NS_API_KEY;
 const API_BASE = "https://gateway.apiportal.ns.nl";
 
