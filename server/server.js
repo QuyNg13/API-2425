@@ -12,6 +12,10 @@ const API_BASE = "https://gateway.apiportal.ns.nl";
 const engine = new Liquid({ extname: '.liquid' });
 const app = new App();
 
+app.listen(port, () => {
+  console.log(`app listening on port ${port}`)
+})
+
 app
   .use(logger())
   .use('/', sirv('dist'))
