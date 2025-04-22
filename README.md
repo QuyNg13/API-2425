@@ -669,7 +669,18 @@ document.getElementById('back').addEventListener('click', function() {
 </details>
 
 deze week heb ik de styling afgemaakt voor alle onderdelen:
-
+<br>
+**form**
+<br>
+<img src="images/form.png">
+<br>
+**departures**
+<br>
+<img src="images/departures.png">
+<br>
+**datailpagina**
+<br>
+<img src="images/detail.png">
 
 </details>
 <!-- ////////////////// -->
