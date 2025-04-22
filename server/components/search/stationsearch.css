@@ -19,7 +19,7 @@
     
     }
 
-    button{
+    >button, form button {
         background: var(--NS-lichtblauw);
         color: white;
         padding: 1rem 0.5rem 1rem 0.5rem;
@@ -32,7 +32,7 @@
         transition: box-shadow 0.2s ease-out;
     }
 
-    button:hover {
+    >button:hover, form button:hover {
         box-shadow: var(--NS-blauw) 0px -50px 0px 0px inset;
     }
 
@@ -43,13 +43,21 @@
         background: white ;
         box-shadow: #232323 0 2px 5px;
         max-width: fit-content;
+        z-index: 1;
 
         li{
             display: flex;
             padding: 0.2rem 0 0.2rem 0;
             cursor: pointer;
-            transition: background-color 0.3s ease-out;
+            transition: background-color 0.1s ease-out;
             align-content: center;
+
+            button {
+                all: unset;
+            }
+            button:focus {
+                border: solid 1px var(--NS-blauw);
+            }
         }
 
         li:hover {

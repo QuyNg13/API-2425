@@ -93,10 +93,10 @@
               <div class="stop-info">
                 <div>
                   {% if stop.plannedArrival %}
-                    <p>Geplande aankomst: {{ stop.plannedArrival | date: "%H:%M" }}</p>
+                    <p>Aankomst: {{ stop.plannedArrival | date: "%H:%M" }}</p>
                   {% endif %}
                   {% if stop.actualArrival %}
-                    <p>Werkelijke vertrektijd: {{ stop.actualDeparture | date: "%H:%M" }}</p>
+                    <p>Vertrek: {{ stop.actualDeparture | date: "%H:%M" }}</p>
                   {% endif %}
                 </div>
                 {% if stop.platform %}

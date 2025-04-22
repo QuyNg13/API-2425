@@ -137,14 +137,29 @@ document.getElementById("adres").addEventListener("input", async function (event
 
         data.suggestions.forEach((suggestion) => {
             const listItem = document.createElement("li");
-            listItem.innerText = suggestion.label;
-            listItem.addEventListener("click", () => {
-                document.getElementById("adres").value = suggestion.label;
-                suggestionsList.innerHTML = ""; // Wis suggesties na selectie
+            
+            // Maak een button element
+            const button = document.createElement("button");
+            button.innerText = suggestion.label; //tekst in button
+            button.addEventListener("click", () => {
+                document.getElementById("adres").value = suggestion.label; // adres in het invoerveld
+                suggestionsList.innerHTML = ""; // Wis suggesties
             });
+
+            listItem.appendChild(button);
             suggestionsList.appendChild(listItem);
         });
     } catch (error) {
         console.error("Fout bij ophalen suggesties:", error);
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("img.train-image[data-offset]").forEach(img => {
+      const offset = parseFloat(img.dataset.offset);
+      if (!isNaN(offset)) {
+        const margin = (offset / 100) * 20; // schaal 0–20rem
+        img.style.marginLeft = `${margin}rem`;
+      }
+    });
+  });

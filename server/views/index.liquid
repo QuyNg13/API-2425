@@ -33,7 +33,7 @@
             <span class="product">{{ dep.product }}</span>
           </div>
           {% if dep.trainImage %}
-            <img src="{{ dep.trainImage }}" alt="Train Image"/>
+            <img src="{{ dep.trainImage }}" alt="Train Image" data-offset="{{ dep.offset }}" class="train-image" />
           {% endif %}
         </a>
       </li>

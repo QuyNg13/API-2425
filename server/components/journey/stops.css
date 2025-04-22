@@ -7,6 +7,8 @@
     grid-template-columns: 1fr auto;
     gap: 1rem;
     background: #fff;
+    overflow: hidden;
+    position: relative;
 
     .text {
       width: max-content;
@@ -23,8 +25,16 @@
 
     img {
       width: 100%;
-      object-fit: cover
-    };
+      object-fit: cover;
+      transition: transform 2s ease-in-out;
+    }
+  }
+
+  .stop-info:hover{
+      
+    img {
+      transform: translateX(100%);
+    }
   }
 }
 
@@ -37,16 +47,20 @@
     align-items: center;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
   
     p {
       width: fit-content;
       justify-self: left;
+      grid-row: 2 / 3;
     }
 
     div {
       display: flex;
       flex-direction: column;
       margin-left: 5px;
+      grid-row: 1 / 3;
+      gap: 0.4rem;	
     }
   }
 

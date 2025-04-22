@@ -126,6 +126,18 @@ app.get('/departures', async (req, res) => {
       };
     }));
 
+    //Bereken tijd-offsets tussen eerste en laatste vertrek
+    const firstTime = new Date(departures[0].time).getTime();
+    const lastTime = new Date(departures[departures.length - 1].time).getTime();
+    const totalDiff = lastTime - firstTime || 1
+
+    //Voeg offset en imageMargin toe aan elke departure
+    departures.forEach(dep => {
+    const depTime = new Date(dep.time).getTime();
+    const offset = ((depTime - firstTime) / totalDiff) * 100;
+    dep.offset = offset;
+    });
+
     //Stationsnaam inladen
     return res.send(renderTemplate('server/views/index.liquid', {
       title: `Vertrektijden van ${station.names.long}`,
@@ -139,7 +151,7 @@ app.get('/departures', async (req, res) => {
 });
 
 // ========================================
-// Route voor gevonden station op basis van adres
+// Route voor gevonden station op basis van locatie
 // ========================================
 app.get('/nearest-station', async (req, res) => {
   const { lat, lng } = req.query;
@@ -187,6 +199,18 @@ app.get('/nearest-station', async (req, res) => {
         trainImage
       };
     }));
+
+        //Bereken tijd-offsets tussen eerste en laatste vertrek
+        const firstTime = new Date(departures[0].time).getTime();
+        const lastTime = new Date(departures[departures.length - 1].time).getTime();
+        const totalDiff = lastTime - firstTime || 1;
+    
+        //Voeg offset en imageMargin toe aan elke departure
+        departures.forEach(dep => {
+          const depTime = new Date(dep.time).getTime();
+          const offset = ((depTime - firstTime) / totalDiff) * 100;
+          dep.offset = offset;
+        });
 
     // Render de template met station- en vertrekgegevens
     return res.send(renderTemplate('server/views/index.liquid', {
