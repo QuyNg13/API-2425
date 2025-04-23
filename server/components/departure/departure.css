@@ -5,7 +5,6 @@
     font-weight: bold;
     font-family: Arial, sans-serif;
     transition: background-color 0.3s ease-out;
-    overflow: hidden;
     position: relative;
 
     a {
@@ -18,21 +17,26 @@
     img {
       height: 3rem;
       max-width: 100%;
-      transition: margin-left 2s ease-in-out, transform 0.5s ease-in-out;
+      transition: margin-left 2s ease-in-out;
+    }
+
+    h3 {
+      transition: scale 0.3s ease-in-out;
     }
   }
 
   li:hover {
     background-color: var(--hover-color);
 
-    img {
-      transform: translateX(10rem);
+     h3{
+      scale: 1.1;
+      background: var(--hover-color);
     }
   }
 }
 
 .departure-info {
-  margin-left: 1rem;
+  margin-left: 1.5rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);

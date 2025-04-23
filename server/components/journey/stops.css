@@ -26,14 +26,6 @@
     img {
       width: 100%;
       object-fit: cover;
-      transition: transform 2s ease-in-out;
-    }
-  }
-
-  .stop-info:hover{
-      
-    img {
-      transform: translateX(100%);
     }
   }
 }
