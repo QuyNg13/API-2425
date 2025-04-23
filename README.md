@@ -725,8 +725,69 @@ deze week heb ik de styling afgemaakt voor alle onderdelen:
 <details>
 <summary><h2>Week 4</h2></summary>
 
-### Doel
+## Doel
+Deze week wil ik de laatste dingen toevoegen voor de beoordeling. 
+Tijdens het testen kwam ik er deze week achter dat het niet mogelijk is om door de zoeksuggesties heen te tabben.
+Dit wil ik graag oplossen. 
+<br>
+<br>
+Ook heb ik vorige week een suggestie gekregen om de plaatjes van de treinen te positioneren op basis van de tijd dat de trein vertrekt. 
+Ik wil dit graag toepassen maar weet nog niet hoe ik het aan ga pakken. Als ik tijd over heb wil ik nog kijken hoe ik de detailpagina beter kan stylen.
 
-### Voortgang
+## Voortgang
 
+### Idee
+Om er voor te zorgen dat je door de zoeksuggesties kan tabben moeten er interactieve elementen komen in de list items en duidelijke styling krijgen.
+<br>
+Om de plaatjes van treinen te positioneren op basis van de tijd dat ze vertrekken moet ik op een of andere manier de vertrektijden omrekenen naar schaal die ik kan gebruiken om de margin aan ta passen van de plaatjes.
+
+### Code
+Om dynamisch een margin te geven aan elke afbeelding koppel ik een `offset`-waarde aan elke departure. 
+Deze waarde valt tussen de 0 en 100. Dit word berekend door middel van tijd van de eerste en laatste trein te pakken, en en verschil om te zetten naar een schaal van 0 tot 100.
+
+<details>
+<summary> code offset waarde</summary>
+
+```
+    //Bereken tijd-offsets tussen eerste en laatste vertrek
+    const firstTime = new Date(departures[0].time).getTime();
+    const lastTime = new Date(departures[departures.length - 1].time).getTime();
+    const totalDiff = lastTime - firstTime || 1
+
+    //Voeg offset en imageMargin toe aan elke departure
+    departures.forEach(dep => {
+    const depTime = new Date(dep.time).getTime();
+    const offset = ((depTime - firstTime) / totalDiff) * 100;
+    dep.offset = offset;
+    });
+```
+</details>
+
+In het liquid bestand geef ik deze waarde mee door middel van `data-offset` in het `img` element.
+<details>
+<summary> code data-offset in img</summary>
+
+```
+          {% if dep.trainImage %}
+            <img src="{{ dep.trainImage }}" alt="Train Image" data-offset="{{ dep.offset }}" class="train-image" />
+          {% endif %}
+```
+</details>
+
+In frontend javascript zert ik de `offset`waarde om in een `rem` waarde voor de margin.
+<details>
+<summary> code offset naar rem</summary>
+
+```
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("img.train-image[data-offset]").forEach(img => {
+      const offset = parseFloat(img.dataset.offset);
+      if (!isNaN(offset)) {
+        const margin = (offset / 100) * 20; // schaal 0–20rem
+        img.style.marginLeft = `${margin}rem`;
+      }
+    });
+  });
+```
+</details>
 </details>
