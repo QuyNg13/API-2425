@@ -790,4 +790,54 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 ```
 </details>
+
+Om de zoeksuggesties meer accessible te maken heb ik buttons in de list items gedaan die worden toegevoegd.
+De standaard styling haal ik er af en op de focus state heb ik een duidelijke border gezet.
+
+<details>
+<summary> code button in suggestions</summary>
+
+```
+try {
+        const response = await fetch(`/autosuggest?query=${query}`);
+        const data = await response.json();
+
+        const suggestionsList = document.getElementById("suggestions");
+        suggestionsList.innerHTML = ""; // Wis bestaande suggesties
+
+        data.suggestions.forEach((suggestion) => {
+            const listItem = document.createElement("li");
+            
+            // Maak een button element
+            const button = document.createElement("button");
+            button.innerText = suggestion.label; //tekst in button
+            button.addEventListener("click", () => {
+                document.getElementById("adres").value = suggestion.label; // adres in het invoerveld
+                suggestionsList.innerHTML = ""; // Wis suggesties
+            });
+
+            listItem.appendChild(button);
+            suggestionsList.appendChild(listItem);
+        });
+    } catch (error) {
+        console.error("Fout bij ophalen suggesties:", error);
+    }
+});
+
+        li{
+            display: flex;
+            padding: 0.2rem 0 0.2rem 0;
+            cursor: pointer;
+            transition: background-color 0.1s ease-out;
+            align-content: center;
+
+            button {
+                all: unset;
+            }
+            button:focus {
+                border: solid 1px var(--NS-blauw);
+            }
+        }
+```
+</details>
 </details>
