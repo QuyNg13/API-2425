@@ -26,8 +26,7 @@ De gebruiker met behulp van `geolocation` het dichtsbijzijnde station opzoeken o
 Om het dichtsbijzijnde station te vinden op basis van een locatie heb ik de lattitude en longditude nodig. 
 Ik heb een knop gemaakt die deze ophalen en het in de URL plaatsen zodat ik die kan ophalen aan in de server.
 Dit doe ik in clientside javascript:
-<details>
-<summary> code lat en lng ophalen</summary>
+<details><summary>code: lat en lng ophalen</summary>
 
 ```
 document.getElementById("getLocation").addEventListener("click", async function() {
@@ -51,10 +50,11 @@ document.getElementById("getLocation").addEventListener("click", async function(
 });
 ```
 </details>
-
+<br>
 Om het dichtsbijzijnde station op te zoeken op basis van lattitude en longditude met de station API gebruik ik de volgende API call: 
+<br>
 <details>
-<summary>code station ophalen op basis van lat en lng</summary>
+<summary>code: station ophalen op basis van lat en lng</summary>
 
 ```
 // Route om dichtstbijzijnde station op te halen
@@ -69,7 +69,7 @@ app.get('/departures', async (req, res) => {
     });
 ```
 </details>
-
+<br>
 Nu ik het station heb gevonden wil ik de aankomde vertrektijden zien van treinen. 
 Uit de station API heb ik ook een uiccode gekregen, deze code is bij elk station uniek en kan ik hem dus gebruiken om de vertrektijden op te zoeken in de departures API.
 <br>
@@ -77,7 +77,7 @@ Uit de station API heb ik ook een uiccode gekregen, deze code is bij elk station
 Ik heb ChatGPT gebruikt om te helpen met hoe ik specifieke data (trein richting, spoor en tijden) uit de API op roep aangezien er veel data uit komt dat ik niet nodig heb.
 de benodigde data roep ik als volgt op:
 <details>
-<summary>code treintijden data ophalen</summary>
+<summary>code: treintijden data ophalen</summary>
 
 ```
 // Haal vertrektijden op
@@ -106,7 +106,7 @@ de benodigde data roep ik als volgt op:
 });
 ```
 </details>
-
+<br>
 De data word vervolgens weergegeven in `index.liquid`. Voor elke trein waar de API een departure kan vinden op de uiccode die is gebruikt in de API call word er een list item gemaakt dat als volgt wordt ingevuld:
 <details>
 <summary>code data weergeven in liquid</summary>
@@ -207,7 +207,7 @@ app.get('/departure/:productNumber', async (req, res) => {
     }));
 ```
 </details>
-
+<br>
 Ik kwam er achter dat bij het ophalen van vertrektijden, hij de niet alleen de uren en minuten geeft maar ook het jaar, maand en datum.
 Deze data heb ik niet nodig. ik heb dit opgelost door `date: "%H:%M"` te gebruiken in het liquid bestand waar tijden worden gebruikt zodat alleen uren en minuten zichtbaar zijn.
 <details>
@@ -221,7 +221,7 @@ Deze data heb ik niet nodig. ik heb dit opgelost door `date: "%H:%M"` te gebruik
   </li>
 ```
 </details>
-
+<br>
 Bij het testen van de detail pagina kwam ik er achter dat je een trein kan bekijken die nog bezig is met een ander traject als hij ver in de toekomst pas vertrekt van het station dat je hebt gevonden.
 Het is dus wel bekend dat de trein langs het station komt dat de gebruiker heeft gevonden maar het moment dat je naar de detailpagina gaat zie je de details van het traject waar hij op dat moment mee bezig is en niet het traject waar de gebruiker op heeft gedrukt.
 <br>
@@ -270,7 +270,7 @@ app.get('/departure/:productNumber', async (req, res) => {
     const journeyData = await departureDetailResponse.json();
 ```
 </details>
-
+<br>
 Op de detail pagina laat ik alleen bij het eerste station de alle details van het treinstel zien met afbeelding.
 Bij de rest van stations laat ik alleen de vertrektijden en drukte zien.
 <details>
@@ -332,7 +332,7 @@ Bij de rest van stations laat ik alleen de vertrektijden en drukte zien.
 {% endblock %}
 ```
 </details>
-
+<br>
 Deze week ben ik ook begonnen met de homepagina stylen zodat alle departures overzichtelijk onder elkaar komen te staan in een lijst.
 <!-- styling image -->
 
@@ -356,7 +356,7 @@ De manier waarop chatGPT de data heeft uigelezen voor de detailpagina vond ik er
       trainImage: actualStock?.trainParts?.[0]?.image?.uri || null
 ```
 </details>
-
+<br>
 Bij het ophalen van de departures wil ik ook bij alle departures een plaatje laten zien van het treinstel. 
 Het plaatje van het treinstel moet ik ophalen uit de journey API. Ik het een extra API call gedaan bij departures om de img op te halen op weer te geven op /departures.
 <details>
@@ -397,8 +397,7 @@ Het plaatje van het treinstel moet ik ophalen uit de journey API. Ik het een ext
     </li>
 ```
 </details>
-
-
+<br>
 </details>
 <!-- ////////////////// -->
 <details>
@@ -444,7 +443,7 @@ app.get('/departures', async (req, res) => {
     const lng = location.lng;
 ```
 </details>
-
+<br>
 Om suggesties op halen doe ik elke keer dat de gebruiker de input veranderd een API call naar de places API. 
 Ik maakte me hier zorgen om het maximaal aantal call dat ik kan maken naar de API maar ik kon niks vinden over een max aantal calls.
 Ik ben er ook achter gekomen dat NS alleen toegang tot de API blokkeert wanneer ze zien dat je misbruik probeert te maken. Ik heb er dus toch voor gekozen om het op deze manier te doen.
@@ -523,7 +522,7 @@ app.get('/autosuggest', async (req, res) => {
 });
 ```
 </details>
-
+<br>
 Ik kwam er achter dat het ophalen van het dichtsbijzijnde station nu niet meer werkt omdat ik de code van station ophalen op basis van adres in dezelfde route heb geschreven.
 Om dit op te lossen heb ik een apparte route gemaakt om het dichtsbijzijnde station te vinden.
 <details>
@@ -590,7 +589,7 @@ app.get('/nearest-station', async (req, res) => {
 });
 ```
 </details>
-
+<br>
 Om de lijst met suggesties onder de input te krijgen heb ik anchor positioning gebruikt.
 <details>
 <summary> code suggesties anchor positioning</summary>
@@ -650,7 +649,7 @@ Om de lijst met suggesties onder de input te krijgen heb ik anchor positioning g
 }
 ```
 </details>
-
+<br>
 Bij het testen kwam ik er achter dat als je return button gebruikt op de detail pagina om de lege versie van de homepage komt,
  en niet vanaf de pagina waar je vandaan kwam waar je het station hebt gevonden met de departures.
 <br>
@@ -667,7 +666,7 @@ document.getElementById('back').addEventListener('click', function() {
   });
 ```
 </details>
-
+<br>
 Omdat ik nog een 2e web API nodig had voor de opdradcht heb ik besloten om een melding te geven als de gebruiker geen toegang heeft gegeven om goelocation op te halen.
 Ik doe dit door middel van de permissions API. Er wordt een melding weergegeven in de form als `navigator.permissions.query` 'denied' is, anders wordt de lat en lng opgehaald zoals gewoonlijk.
 <details>
@@ -705,18 +704,18 @@ Ik doe dit door middel van de permissions API. Er wordt een melding weergegeven 
 });
 ```
 </details>
-
+<br>
 deze week heb ik de styling afgemaakt voor alle onderdelen:
 <br>
-**form**
+<strong>form</strong>
 <br>
 <img src="images/form.png">
 <br>
-**departures**
+<strong>departures</strong>
 <br>
 <img src="images/departures.png">
 <br>
-**datailpagina**
+<strong>datailpagina</strong>
 <br>
 <img src="images/detail.png">
 
@@ -762,7 +761,7 @@ Deze waarde valt tussen de 0 en 100. Dit word berekend door middel van tijd van 
     });
 ```
 </details>
-
+<br>
 In het liquid bestand geef ik deze waarde mee door middel van `data-offset` in het `img` element.
 <details>
 <summary> code data-offset in img</summary>
@@ -773,7 +772,7 @@ In het liquid bestand geef ik deze waarde mee door middel van `data-offset` in h
           {% endif %}
 ```
 </details>
-
+<br>
 In frontend javascript zert ik de `offset`waarde om in een `rem` waarde voor de margin.
 <details>
 <summary> code offset naar rem</summary>
@@ -790,7 +789,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 ```
 </details>
-
+<br>
 Om de zoeksuggesties meer accessible te maken heb ik buttons in de list items gedaan die worden toegevoegd.
 De standaard styling haal ik er af en op de focus state heb ik een duidelijke border gezet.
 
