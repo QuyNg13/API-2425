@@ -1,6 +1,134 @@
 # API
 API repository | Quy Nguyen
 
+## Hoe werkt het?
+
+De webapp bestaat uit twee hoofdonderdelen: de **frontend** (client) en de **backend** (server). Hieronder leggen we uit hoe beide delen werken.
+
+---
+
+### 1. Frontend (de client)
+
+De frontend bevat alle bestanden die uiteindelijk in de browser worden geladen.
+
+- **Bestand:** `client/index.js`  
+  Dit is het startpunt van de frontend. Hier begint Vite met het bundelen van alle JavaScript.
+
+- **CSS:** `client/index.css`  
+  Dit bestand importeert alle stijlen (ook die in de `server/components/` folder). Zo zorgt het voor een centrale styling van de app.
+
+- **Vite:**  
+  Vite zorgt ervoor dat de frontend supersnel wordt opgebouwd. Tijdens development werkt het met hot reloading (veranderingen verschijnen meteen in de browser). Voor productie maakt Vite een bundel in de `dist/` map.
+
+---
+
+### 2. Backend (de server)
+
+De backend is verantwoordelijk voor het genereren van HTML-pagina’s en het afhandelen van verzoeken.
+
+- **Bestand:** `server/server.js`  
+  Hier wordt een eenvoudige Node.js server opgezet met [TinyHTTP](https://tinyhttp.v1rtl.site/). Deze server:
+  - Serveert de pagina’s aan de browser
+  - Gebruikt LiquidJS om templates om te zetten naar HTML
+  - Verwerkt sessies en cookies
+  - Maakt gebruik van de gebundelde frontend-bestanden uit `dist/`
+
+- **Templates:** `server/views/`  
+  De pagina’s worden geschreven in `.liquid` bestanden (vergelijkbaar met HTML + extra logica).
+
+- **Componenten & Layouts:**  
+  Herbruikbare stukjes van de interface (zoals knoppen of lijsten) zitten in `server/components/`. De algemene pagina-indeling staat in `server/layouts/`.
+
+---
+
+Zo werken de frontend en backend samen:
+
+1. De gebruiker opent de website.
+2. De server rendert de juiste pagina met LiquidJS en stuurt die naar de browser.
+3. De gebundelde JavaScript en CSS uit `dist/` worden geladen.
+4. Interactie (zoals klikken of zoeken) wordt afgehandeld door de frontend.
+
+## Installatie en gebruik
+
+### 1. Vereisten
+
+- **[Node.js](https://nodejs.org/)**
+- **npm**
+
+### 2. Installeren
+
+Clone de repository en installeer de nodige packages:
+
+```
+npm install
+```
+
+### 3. Dev starten
+
+Clone de repository en installeer de nodige packages:
+
+```
+npm run dev
+```
+Dit doet het volgende:
+
+- De client wordt automatisch opnieuw opgebouwd als je wijzigingen maakt in client/
+
+- De server herstart automatisch als je werkt in server/ dankzij nodemon
+
+Je kunt nu de app bekijken via:
+http://localhost:3000
+
+### 4. Build maken
+
+Om de applicatie klaar te maken voor online gebruik (bijv. op een server):
+
+```
+npm run build
+```
+De frontend-bestanden worden gebundeld en opgeslagen in de dist/ map.
+
+### 5. server starten
+
+Start de backend-server met de gebundelde frontend:
+
+```
+npm start
+```
+Je draait nu de app zoals hij bedoeld is voor eindgebruikers.
+
+##  Styling
+
+De CSS in dit project is georganiseerd zodat het makkelijk te beheren en uit te breiden is. Er wordt gebruikgemaakt van **modulaire styling**, waarbij elk onderdeel zijn eigen stijlen heeft.
+
+###  Structuur
+
+De hoofd CSS-file is `client/index.css`. Deze file importeert alle andere stijlen uit het project.
+
+```css
+/* client/index.css */
+@import 'reset.css';
+@import "typography.css";
+
+@import '../server/layouts/base.css';
+@import '../server/views/index.css';
+
+@import '../server/components/journey/journeytitle.css';
+@import '../server/components/journey/stops.css';
+@import '../server/components/journey/returnBtn.css';
+@import '../server/components/departure/departure.css';
+@import '../server/components/station/station.css';
+@import '../server/components/search/stationsearch.css';
+@import '../server/components/search/permissionMessage.css';
+```
+
+| Locatie | Omschrijving |
+| ------------- |:-------------:|
+|client/index.css	| Centrale plek die alle CSS importeert|
+|server/layouts/	|Layout-specifieke stijlen (bijv. header en footer)|
+|server/views/	|Pagina-specifieke stijlen (bijv. homepage)|
+|server/components/	|Component-specifieke stijlen (bijv. zoekbalken)|
+
 <details>
 <summary><h2>Week 1</h2></summary>
 
