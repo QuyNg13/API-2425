@@ -3,7 +3,7 @@ API repository | Quy Nguyen
 
 ## Hoe werkt het?
 
-De webapp bestaat uit twee hoofdonderdelen: de **frontend** (client) en de **backend** (server). Hieronder leggen we uit hoe beide delen werken.
+De webapp bestaat uit twee hoofdonderdelen: de **frontend** (client) en de **backend** (server). Hieronder leggen ik uit hoe beide delen werken.
 
 ---
 
