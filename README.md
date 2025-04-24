@@ -3,7 +3,7 @@ API repository | Quy Nguyen
 
 ## Hoe werkt het?
 
-De webapp bestaat uit twee hoofdonderdelen: de **frontend** (client) en de **backend** (server). Hieronder leggen ik uit hoe beide delen werken.
+De webapp bestaat uit twee hoofdonderdelen: de **frontend** (client) en de **backend** (server). Hieronder leg ik uit hoe beide delen werken.
 
 ---
 
@@ -40,7 +40,7 @@ De backend is verantwoordelijk voor het genereren van HTML-pagina’s en het afh
   Herbruikbare stukjes van de interface (zoals knoppen of lijsten) zitten in `server/components/`. De algemene pagina-indeling staat in `server/layouts/`.
 ---
 ### 3. .ENV bestand (enviroment) 
-Bevat gevoelige configuratie, in dit geval API-key voor de NS API.
+Bevat gevoelige informatie, in dit geval API-key voor de NS API.
 ```
 NS_API_KEY=your-ns-api-key-here
 ```
