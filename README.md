@@ -38,6 +38,13 @@ De backend is verantwoordelijk voor het genereren van HTML-pagina’s en het afh
 
 - **Componenten & Layouts:**  
   Herbruikbare stukjes van de interface (zoals knoppen of lijsten) zitten in `server/components/`. De algemene pagina-indeling staat in `server/layouts/`.
+---
+### 3. .ENV bestand (enviroment) 
+Bevat gevoelige configuratie, in dit geval API-key voor de NS API.
+```
+NS_API_KEY=your-ns-api-key-here
+```
+Deze wordt in de backend gebruikt via process.env.NS_API_KEY.
 
 ---
 
