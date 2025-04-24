@@ -154,7 +154,7 @@ De gebruiker met behulp van `geolocation` het dichtsbijzijnde station opzoeken o
 Om het dichtsbijzijnde station te vinden op basis van een locatie heb ik de lattitude en longditude nodig. 
 Ik heb een knop gemaakt die deze ophalen en het in de URL plaatsen zodat ik die kan ophalen aan in de server.
 Dit doe ik in clientside javascript:
-<details><summary>code: lat en lng ophalen</summary>
+<details><summary>code lat en lng ophalen</summary>
 
 ```
 document.getElementById("getLocation").addEventListener("click", async function() {
@@ -182,7 +182,7 @@ document.getElementById("getLocation").addEventListener("click", async function(
 Om het dichtsbijzijnde station op te zoeken op basis van lattitude en longditude met de station API gebruik ik de volgende API call: 
 <br>
 <details>
-<summary>code: station ophalen op basis van lat en lng</summary>
+<summary>code station ophalen op basis van lat en lng</summary>
 
 ```
 // Route om dichtstbijzijnde station op te halen
@@ -205,7 +205,7 @@ Uit de station API heb ik ook een uiccode gekregen, deze code is bij elk station
 Ik heb ChatGPT gebruikt om te helpen met hoe ik specifieke data (trein richting, spoor en tijden) uit de API op roep aangezien er veel data uit komt dat ik niet nodig heb.
 de benodigde data roep ik als volgt op:
 <details>
-<summary>code: treintijden data ophalen</summary>
+<summary>code treintijden data ophalen</summary>
 
 ```
 // Haal vertrektijden op
